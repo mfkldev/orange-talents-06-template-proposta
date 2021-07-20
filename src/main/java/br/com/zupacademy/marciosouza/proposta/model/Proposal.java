@@ -1,10 +1,8 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+
+import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
@@ -28,6 +26,9 @@ public class Proposal {
 
     @Positive @NotNull
     private BigDecimal salary;
+
+    @Enumerated(EnumType.STRING)
+    private StatusProposal status;
 
     @Deprecated
     public Proposal() {
@@ -55,5 +56,17 @@ public class Proposal {
 
     public Long getId() {
         return id;
+    }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setStatus(String status) {
+        this.status = StatusProposal.getStatus(status);
+    }
+
+    public StatusProposal getStatus() {
+        return status;
     }
 }

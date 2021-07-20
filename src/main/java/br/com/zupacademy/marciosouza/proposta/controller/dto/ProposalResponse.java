@@ -9,6 +9,7 @@ public class ProposalResponse {
     private String name;
     private String address;
     private String salary;
+    private String status;
 
     public ProposalResponse(Proposal proposal) {
         this.document = "***.***.***.**";
@@ -16,7 +17,8 @@ public class ProposalResponse {
         this.name = proposal.getName();
         this.address = proposal.getAddress();
         this.salary = "**.**";
-    }
+        this.status = proposal.getStatus().name();
+}
 
     public String getDocument() {
         return document;
@@ -36,5 +38,9 @@ public class ProposalResponse {
 
     public String getSalary() {
         return salary;
+    }
+
+    public String getStatus() {
+        return status;
     }
 }
