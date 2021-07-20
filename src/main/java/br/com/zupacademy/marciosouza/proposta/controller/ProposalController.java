@@ -3,6 +3,8 @@ package br.com.zupacademy.marciosouza.proposta.controller;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponse;
 import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,6 +17,9 @@ import java.net.URI;
 @RestController
 public class ProposalController {
 
+    @Autowired
+    private ProposalRepository proposalRepository;
+
     @PostMapping(value = "/proposta")
     @Transactional
     public ResponseEntity<?> registerProposal(@RequestBody @Valid ProposalRequest proposalRequest, UriComponentsBuilder uriComponentsBuilder){
@@ -22,6 +27,8 @@ public class ProposalController {
         Proposal proposal = proposalRequest.toModel();
 
         URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(proposal.getId()).toUri();
+
+        proposalRepository.save(proposal);
 
         return ResponseEntity.created(uri).body(new ProposalResponse(proposal));
     }

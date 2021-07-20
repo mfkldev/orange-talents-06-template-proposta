@@ -1,7 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -29,6 +28,10 @@ public class Proposal {
 
     @Positive @NotNull
     private BigDecimal salary;
+
+    @Deprecated
+    public Proposal() {
+    }
 
     public Proposal(String document, String email, String name, String address, BigDecimal salary) {
         this.document = document;

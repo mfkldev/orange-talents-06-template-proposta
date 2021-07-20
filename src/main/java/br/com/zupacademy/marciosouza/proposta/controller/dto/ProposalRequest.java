@@ -1,6 +1,7 @@
 package br.com.zupacademy.marciosouza.proposta.controller.dto;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
+import br.com.zupacademy.marciosouza.proposta.config.validation.Unique;
 import br.com.zupacademy.marciosouza.proposta.model.Proposal;
 
 import javax.validation.constraints.*;
@@ -12,8 +13,7 @@ public class ProposalRequest {
     @NotBlank
     private String document;
 
-    @Email
-    @NotBlank
+    @Email @NotBlank @Unique(clazz = Proposal.class, fieldName = "email")
     private String email;
 
     @NotBlank
