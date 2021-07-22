@@ -1,7 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
-
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -75,5 +74,9 @@ public class Proposal {
 
     public void setIdCard(String idCard) {
         this.idCard = idCard;
+    }
+
+    public String getIdCard() {
+        return this.idCard;
     }
 }

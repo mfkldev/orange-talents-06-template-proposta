@@ -10,15 +10,33 @@ public class ProposalResponse {
     private String address;
     private String salary;
     private String status;
+    private String creditCard;
 
     public ProposalResponse(Proposal proposal) {
-        this.document = "***.***.***.**";
+        this.document = hideDocumentInformation(proposal.getDocument());
         this.email = proposal.getEmail();
         this.name = proposal.getName();
         this.address = proposal.getAddress();
-        this.salary = "**.**";
+        this.salary = "Informação pessoal";
         this.status = proposal.getStatus().name();
-}
+        this.creditCard =  hasCreditCard(proposal.getIdCard());
+    }
+
+    public String hasCreditCard(String numberCreditCard){
+        if (numberCreditCard == null){
+            return "Proposta em análise :-)";
+        }else{
+            return hideCardInformation(numberCreditCard);
+        }
+    }
+
+    public String hideCardInformation(String numberCreditCard){
+        return "****.".repeat(3).concat(numberCreditCard.substring(15, 19));
+    }
+
+    public String hideDocumentInformation(String numberDocument){
+        return numberDocument.substring(0, 3).concat((".***").repeat(2)).concat("-**");
+    }
 
     public String getDocument() {
         return document;
@@ -42,5 +60,9 @@ public class ProposalResponse {
 
     public String getStatus() {
         return status;
+    }
+
+    public String getCreditCard() {
+        return creditCard;
     }
 }

@@ -8,16 +8,18 @@ import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponse;
 import br.com.zupacademy.marciosouza.proposta.model.Proposal;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.Optional;
 
 @RestController
+@RequestMapping("/proposta")
 public class ProposalController {
 
     @Autowired
@@ -26,7 +28,7 @@ public class ProposalController {
     @Autowired
     private FinancialAnalysisApi financialAnalysisApi;
 
-    @PostMapping(value = "/proposta")
+    @PostMapping
     @Transactional
     public ResponseEntity<?> registerProposal(@RequestBody @Valid ProposalRequest proposalRequest, UriComponentsBuilder uriComponentsBuilder){
 
@@ -41,5 +43,17 @@ public class ProposalController {
         proposal.setStatus(response.getResultadoSolicitacao());
 
         return ResponseEntity.created(uri).body(new ProposalResponse(proposal));
+    }
+
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<?> proposedConsultation(@PathVariable Long id){
+
+        Optional<Proposal> proposal = proposalRepository.findById(id);
+
+        if (proposal.isEmpty()){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Proposta não encontrada");
+        }
+
+        return ResponseEntity.ok(new ProposalResponse(proposal.get()));
     }
 }
