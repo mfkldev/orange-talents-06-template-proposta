@@ -30,6 +30,9 @@ public class Proposal {
     @Enumerated(EnumType.STRING)
     private StatusProposal status;
 
+    @Column(name = "idcard")
+    private String idCard = null;
+
     @Deprecated
     public Proposal() {
     }
@@ -68,5 +71,9 @@ public class Proposal {
 
     public StatusProposal getStatus() {
         return status;
+    }
+
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
     }
 }
