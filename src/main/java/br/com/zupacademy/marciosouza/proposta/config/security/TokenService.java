@@ -5,17 +5,19 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import java.util.Date;
 
 @Service
+@Profile("prod")
 public class TokenService {
 	
-	@Value("${ecommerce.jwt.expiration}")
+	@Value("${proposta.jwt.expiration}")
 	private String expiration;
 	
-	@Value("${ecommerce.jwt.secret}") //Injeta propriedades do application.properties
+	@Value("${proposta.jwt.secret}") //Injeta propriedades do application.properties
 	private String secret;
 
 	public String generateToken(Authentication authentication) {
@@ -24,7 +26,7 @@ public class TokenService {
 		Date expirationDate = new Date(today.getTime() + Long.parseLong(expiration));
 		
 		return Jwts.builder()
-				.setIssuer("API Ecommerce Proposta")
+				.setIssuer("API Proposta")
 				.setSubject(logged.getId().toString())
 				.setIssuedAt(today)
 				.setExpiration(expirationDate)

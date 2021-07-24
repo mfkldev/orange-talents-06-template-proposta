@@ -4,6 +4,7 @@ import br.com.zupacademy.marciosouza.proposta.config.security.TokenService;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.LoginRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.TokenDto;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,6 +18,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
+@Profile("prod")
 public class AuthenticationController {
 	
 	@Autowired
