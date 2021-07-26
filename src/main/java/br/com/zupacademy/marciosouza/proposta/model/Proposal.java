@@ -4,6 +4,8 @@ import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Proposal {
@@ -31,6 +33,9 @@ public class Proposal {
 
     @Column(name = "idcard")
     private String idCard = null;
+
+    @OneToMany(mappedBy = "proposal", cascade = CascadeType.MERGE)
+    private Set<Biometry> biometryList = new HashSet<>();
 
     @Deprecated
     public Proposal() {
@@ -78,5 +83,13 @@ public class Proposal {
 
     public String getIdCard() {
         return this.idCard;
+    }
+
+    public Set<Biometry> getBiometryList() {
+        return biometryList;
+    }
+
+    public void setBiometry(Biometry biometry) {
+        biometryList.add(biometry);
     }
 }

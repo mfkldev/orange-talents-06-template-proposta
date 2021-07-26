@@ -1,4 +1,4 @@
-package br.com.zupacademy.marciosouza.proposta.config.json;
+package br.com.zupacademy.marciosouza.proposta.config.exception;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -9,7 +9,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,5 +31,12 @@ public class ErroDeValidacaoHandler {
         });
 
         return listErrosReponse;
+    }
+
+    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProposalNotFoundException.class)
+    public ErrosReponse handle2(ProposalNotFoundException exception){
+
+        return new ErrosReponse("idEstado", exception.getMessage());
     }
 }

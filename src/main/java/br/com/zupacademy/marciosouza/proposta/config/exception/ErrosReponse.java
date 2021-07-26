@@ -1,4 +1,4 @@
-package br.com.zupacademy.marciosouza.proposta.config.json;
+package br.com.zupacademy.marciosouza.proposta.config.exception;
 
 public class ErrosReponse {
 

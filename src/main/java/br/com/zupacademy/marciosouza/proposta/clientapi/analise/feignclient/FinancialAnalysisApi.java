@@ -10,6 +10,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 public interface FinancialAnalysisApi {
 
     @PostMapping(value = "solicitacao")
-    public ProposalForFinancialAnalysisResponse verificationFinancialAnalysis(@RequestBody ProposalForFinancialAnalysisRequest proposalForFinancialAnalysisRequest);
+    ProposalForFinancialAnalysisResponse verificationFinancialAnalysis(@RequestBody ProposalForFinancialAnalysisRequest proposalForFinancialAnalysisRequest);
 }
 
