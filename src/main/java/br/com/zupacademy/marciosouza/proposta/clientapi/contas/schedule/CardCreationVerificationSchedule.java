@@ -20,7 +20,7 @@ public class CardCreationVerificationSchedule {
     @Autowired
     private ProposalRepository proposalRepository;
 
-    @Scheduled(fixedDelay = 60000)
+    @Scheduled(fixedDelay = 10000)
     private void run() {
         List<Proposal> eligibleProposals = proposalRepository.eligibleSearchWithoutCard();
 

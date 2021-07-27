@@ -21,6 +21,7 @@ public class ErroDeValidacaoHandler {
     @ResponseStatus(code = HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public List<ErrosReponse> handle(MethodArgumentNotValidException exception){
+
         List<ErrosReponse> listErrosReponse = new ArrayList<>();
 
         List<FieldError> fieldErrors = exception.getBindingResult().getFieldErrors();
@@ -33,10 +34,17 @@ public class ErroDeValidacaoHandler {
         return listErrosReponse;
     }
 
-    @ResponseStatus(code = HttpStatus.BAD_REQUEST)
+    @ResponseStatus(code = HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProposalNotFoundException.class)
     public ErrosReponse handle2(ProposalNotFoundException exception){
 
-        return new ErrosReponse("idEstado", exception.getMessage());
+        return new ErrosReponse("idCard", exception.getMessage());
+    }
+
+    @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
+    @ExceptionHandler(CardlockUnprocessableEntityException.class)
+    public ErrosReponse handle2(CardlockUnprocessableEntityException exception){
+
+        return new ErrosReponse("idCard", exception.getMessage());
     }
 }

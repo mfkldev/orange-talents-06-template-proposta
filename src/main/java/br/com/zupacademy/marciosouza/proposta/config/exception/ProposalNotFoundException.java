@@ -1,6 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.config.exception;
 
-public class ProposalNotFoundException extends RuntimeException{
+public class ProposalNotFoundException extends RuntimeException {
 
     private String message;
 

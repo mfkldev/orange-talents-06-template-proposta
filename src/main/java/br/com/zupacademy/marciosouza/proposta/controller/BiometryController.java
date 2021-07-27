@@ -25,9 +25,9 @@ public class BiometryController {
 
     @PostMapping("/biometria")
     @Transactional
-    public ResponseEntity<?> save(@RequestParam String idCard, @RequestBody @Valid BiometryRequest biometryRequest, UriComponentsBuilder uriComponentsBuilder){
+    public ResponseEntity<?> save(@RequestParam String idcard, @RequestBody @Valid BiometryRequest biometryRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        Proposal proposal = proposalRepository.findByIdCard(idCard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
+        Proposal proposal = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
 
         Biometry biometry = biometryRequest.toModel(proposal);
 
