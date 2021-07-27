@@ -10,7 +10,7 @@
 	</parent>
 	<groupId>br.com.zupacademy.marciosouza</groupId>
 	<artifactId>proposta</artifactId>
-	<version>0.4.0</version>
+	<version>0.5.0</version>
 	<name>proposta</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
@@ -67,6 +67,14 @@
 			<groupId>io.jsonwebtoken</groupId>
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-oauth2-jose</artifactId>
 		</dependency>
 	</dependencies>
 

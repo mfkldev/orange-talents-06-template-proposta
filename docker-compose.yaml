@@ -9,14 +9,6 @@ services:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_SYNC_LIMIT: 2
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   kafka:
     image: "confluentinc/cp-kafka:5.2.1"
@@ -34,14 +26,6 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   postgres:
     image: 'postgres:alpine'
@@ -57,14 +41,6 @@ services:
       POSTGRES_PASSWORD: password
       POSTGRES_DB: keycloak
       POSTGRES_HOST: postgres
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   keycloak:
     image: jboss/keycloak
@@ -96,15 +72,6 @@ services:
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: Pa55w0rd
       POSTGRES_PORT_5432_TCP_ADDR: 127.0.0.1
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
-
 
   analise:
     image: 'zupacademy/analise-financeira'
@@ -118,14 +85,6 @@ services:
       LOG_LEVEL: INFO
       URL_SISTEMA_CARTAO: http://contas:8888/api/cartoes
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   contas:
     image: 'zupacademy/contas'
@@ -138,14 +97,6 @@ services:
       SERVER_PORT: 8888
       LOG_LEVEL: INFO
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 1G
-        reservations:
-          cpus: '0.0001'
-          memory: 605982K
 
   proposta:
     image: mfkldev/proposta
@@ -160,18 +111,13 @@ services:
       DATABASE_PASSWORD: root
       ANALISE_API: http://analise:9999/api
       CARTOES_API: http://contas:8888/api
+      KEYCLOAK_ISSUER_URI: http://keycloak:8080/auth/realms/proposal
+      KEYCLOAK_JWKS_URI: http://keycloak:8080/auth/realms/proposal/protocol/openid-connect/certs
     depends_on:
       - db
       - analise
       - contas
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
+      - keycloak
 
   db:
     image: mysql
@@ -186,17 +132,9 @@ services:
       MYSQL_ROOT_PASSWORD: root
     volumes:
       - mysql-data:/var/lib/mysql
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   transacoes:
-    image: 'zupacademy/transacoes'
+    image: zupacademy/transacoes
     container_name: transacoes
     ports:
       - 7777:7777
@@ -209,14 +147,6 @@ services:
       LOG_LEVEL: INFO
       KAFKA_HOST: "kafka:29092"
       JAEGER_ENDPOINT: http://jaeger:14268/api/traces
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   jaeger:
     image: jaegertracing/all-in-one
@@ -234,14 +164,6 @@ services:
       - proposta-network
     environment:
       COLLECTOR_ZIPKIN_HTTP_PORT: 9411
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   prometheus:
     image: prom/prometheus
@@ -252,14 +174,6 @@ services:
       - "9090:9090"
     networks:
       - proposta-network
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   grafana:
     image: grafana/grafana
@@ -272,14 +186,6 @@ services:
       - proposta-network
     depends_on:
       - prometheus
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
   vault:
     image: vault:1.5.3
@@ -292,14 +198,6 @@ services:
       VAULT_DEV_ROOT_TOKEN_ID: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_TOKEN: ee413645-dbe8-4848-afc6-6bb2768ada75
       VAULT_ADDR: http://127.0.0.1:8200
-    deploy:
-      resources:
-        limits:
-          cpus: '0.001'
-          memory: 100M
-        reservations:
-          cpus: '0.0001'
-          memory: 50M
 
 networks:
   proposta-network:
