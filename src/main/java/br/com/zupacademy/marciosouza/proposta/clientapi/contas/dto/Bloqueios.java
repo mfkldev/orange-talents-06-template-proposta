@@ -11,9 +11,8 @@ public class Bloqueios {
         this.ativo = ativo;
     }
 
-    public Bloqueios() {}
-
-    public boolean isAtivo() {
-        return ativo;
+    public Bloqueios() {
     }
+
+    public boolean isAtivo() { return ativo; }
 }

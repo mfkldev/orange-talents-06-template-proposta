@@ -4,9 +4,9 @@ import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardCreationV
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardLockVerificationResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @FeignClient(name = "AccountApi", url = "http://localhost:8888/api/cartoes")
 public interface AccountApi {
@@ -16,4 +16,7 @@ public interface AccountApi {
 
     @GetMapping("/{id}")
     ResponseEntity<CardLockVerificationResponse> cardLockVerification(@PathVariable String id);
+
+    @PostMapping("/{id}/bloqueios")
+    void requestCardLock(@PathVariable String id, @RequestBody Map<String, String> sistemaResponsavel);
 }
