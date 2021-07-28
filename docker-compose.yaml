@@ -113,6 +113,8 @@ services:
       CARTOES_API: http://contas:8888/api
       KEYCLOAK_ISSUER_URI: http://keycloak:8080/auth/realms/proposal
       KEYCLOAK_JWKS_URI: http://keycloak:8080/auth/realms/proposal/protocol/openid-connect/certs
+      APPLICATION_API_NAME: Proposta-API
+      ENVIRONMENT_API: prod
     depends_on:
       - db
       - analise
