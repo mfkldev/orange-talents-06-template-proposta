@@ -42,9 +42,9 @@ public class ErroDeValidacaoHandler {
     }
 
     @ResponseStatus(code = HttpStatus.UNPROCESSABLE_ENTITY)
-    @ExceptionHandler(CardlockUnprocessableEntityException.class)
-    public ErrosReponse handle2(CardlockUnprocessableEntityException exception){
+    @ExceptionHandler(UnprocessableEntityException.class)
+    public String handle3(UnprocessableEntityException exception){
 
-        return new ErrosReponse("idCard", exception.getMessage());
+        return exception.getMessage();
     }
 }

@@ -3,7 +3,6 @@ package br.com.zupacademy.marciosouza.proposta.controller.dto;
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
 import br.com.zupacademy.marciosouza.proposta.config.validation.Unique;
 import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
-
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
 
@@ -35,5 +34,9 @@ public class ProposalRequest {
 
     public ProposalModel toModel() {
         return new ProposalModel(this.document, this.email, this.name, this.address, this.salary);
+    }
+
+    public String getEmail() {
+        return email;
     }
 }

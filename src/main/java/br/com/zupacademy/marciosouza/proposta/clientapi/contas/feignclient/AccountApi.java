@@ -1,8 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient;
 
-import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardCreationVerificationResponse;
-import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardLockVerificationResponse;
-import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardlockRequest;
+import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.*;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.TravelNoticeRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
@@ -15,11 +13,14 @@ public interface AccountApi {
     ResponseEntity<CardCreationVerificationResponse> cardCreationVerification(@RequestParam Long idProposta);
 
     @GetMapping("/{id}")
-    ResponseEntity<CardLockVerificationResponse> cardLockVerification(@PathVariable String id);
+    ResponseEntity<AccountCardResponse> getAccountCard(@PathVariable String id);
 
     @PostMapping("/{id}/bloqueios")
     void requestCardLock(@PathVariable String id, @RequestBody CardlockRequest request);
 
     @PostMapping("/{id}/avisos")
     void travelNoticeNotification(@PathVariable String id, @RequestBody TravelNoticeRequest request);
+
+    @PostMapping("/{id}/carteiras")
+    ResponseEntity<WalletContaAPIReponse> associatePaypal(@PathVariable(name = "id") String idCard, @RequestBody AssociateWalletRequest request);
 }

@@ -1,8 +1,8 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
-import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.Bloqueios;
+import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.Bloqueio;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.AccountApi;
-import br.com.zupacademy.marciosouza.proposta.config.exception.CardlockUnprocessableEntityException;
+import br.com.zupacademy.marciosouza.proposta.config.exception.UnprocessableEntityException;
 import br.com.zupacademy.marciosouza.proposta.model.enums.StatusCardLock;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
@@ -41,10 +41,10 @@ public class CardlockModel {
     public CardlockModel() {}
 
     public void cardLockedVerication(String idcard, AccountApi accountApi) {
-        List<Bloqueios> bloqueios = Objects.requireNonNull(accountApi.cardLockVerification(idcard).getBody()).getBloqueios();
+        List<Bloqueio> bloqueios = Objects.requireNonNull(accountApi.getAccountCard(idcard).getBody()).getBloqueios();
 
-        boolean hasActiveBlock = bloqueios.stream().anyMatch(Bloqueios::isAtivo);
-        if (hasActiveBlock) throw new CardlockUnprocessableEntityException("O cartão já se encontra bloqueado");
+        boolean hasActiveBlock = bloqueios.stream().anyMatch(Bloqueio::isAtivo);
+        if (hasActiveBlock) throw new UnprocessableEntityException("O cartão já se encontra bloqueado");
     }
 
     public LocalDateTime getCreationMoment() {

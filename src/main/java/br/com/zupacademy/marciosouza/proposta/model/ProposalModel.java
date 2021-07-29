@@ -5,10 +5,7 @@ import br.com.zupacademy.marciosouza.proposta.model.enums.StatusProposal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "proposal")
@@ -46,6 +43,9 @@ public class ProposalModel {
 
     @OneToMany(mappedBy = "proposalModel")
     private List<TravelNoticeModel> travelNoticeModelList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proposalModel")
+    private List<Wallet> walletList = new ArrayList<>();
 
     @Deprecated
     public ProposalModel() {

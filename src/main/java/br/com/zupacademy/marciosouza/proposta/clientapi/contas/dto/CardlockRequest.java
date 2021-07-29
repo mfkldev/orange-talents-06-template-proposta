@@ -1,7 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-
 import javax.validation.constraints.NotBlank;
 
 public class CardlockRequest {
