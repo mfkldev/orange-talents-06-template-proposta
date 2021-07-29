@@ -1,6 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.controller.dto;
 
-import br.com.zupacademy.marciosouza.proposta.model.Cardlock;
+import br.com.zupacademy.marciosouza.proposta.model.CardlockModel;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
@@ -12,11 +12,11 @@ public class CardlockResponse {
     private String userAgent;
     private String idCard;
 
-    public CardlockResponse(Cardlock cardlock) {
-        this.creationMoment = cardlock.getCreationMoment();
-        this.ipClient = cardlock.getIpClient();
-        this.userAgent = cardlock.getUserAgent();
-        this.idCard = cardlock.getProposal().getIdCard();
+    public CardlockResponse(CardlockModel cardlockModel) {
+        this.creationMoment = cardlockModel.getCreationMoment();
+        this.ipClient = cardlockModel.getIpClient();
+        this.userAgent = cardlockModel.getUserAgent();
+        this.idCard = cardlockModel.getProposal().getIdCard();
     }
 
     public LocalDateTime getCreationMoment() {

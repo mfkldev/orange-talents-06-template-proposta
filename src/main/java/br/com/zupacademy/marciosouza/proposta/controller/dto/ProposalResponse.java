@@ -1,6 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.controller.dto;
 
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 
 public class ProposalResponse {
 
@@ -12,14 +12,14 @@ public class ProposalResponse {
     private String status;
     private String creditCard;
 
-    public ProposalResponse(Proposal proposal) {
-        this.document = hideDocumentInformation(proposal.getDocument());
-        this.email = proposal.getEmail();
-        this.name = proposal.getName();
-        this.address = proposal.getAddress();
+    public ProposalResponse(ProposalModel proposalModel) {
+        this.document = hideDocumentInformation(proposalModel.getDocument());
+        this.email = proposalModel.getEmail();
+        this.name = proposalModel.getName();
+        this.address = proposalModel.getAddress();
         this.salary = "Informação pessoal";
-        this.status = proposal.getStatus().name();
-        this.creditCard =  hasCreditCard(proposal.getIdCard());
+        this.status = proposalModel.getStatus().name();
+        this.creditCard =  hasCreditCard(proposalModel.getIdCard());
     }
 
     public String hasCreditCard(String numberCreditCard){

@@ -1,7 +1,7 @@
 package br.com.zupacademy.marciosouza.proposta.controller.dto;
 
-import br.com.zupacademy.marciosouza.proposta.model.Biometry;
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.BiometryModel;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 
 import java.util.Set;
 
@@ -15,18 +15,18 @@ public class ProposalResponseWithBiometry {
     private String creditCard;
     private StatusBiometry statusBiometry;
 
-    public ProposalResponseWithBiometry(Proposal proposal) {
-        this.document = hideDocumentInformation(proposal.getDocument());
-        this.email = proposal.getEmail();
-        this.name = proposal.getName();
-        this.address = proposal.getAddress();
+    public ProposalResponseWithBiometry(ProposalModel proposalModel) {
+        this.document = hideDocumentInformation(proposalModel.getDocument());
+        this.email = proposalModel.getEmail();
+        this.name = proposalModel.getName();
+        this.address = proposalModel.getAddress();
         this.salary = "Informação pessoal";
-        this.creditCard =  hasCreditCard(proposal.getIdCard());
-        this.statusBiometry = hasBiometry(proposal.getBiometryList());
+        this.creditCard =  hasCreditCard(proposalModel.getIdCard());
+        this.statusBiometry = hasBiometry(proposalModel.getBiometryList());
     }
 
-    private StatusBiometry hasBiometry(Set<Biometry> biometryList) {
-        return biometryList.isEmpty() ? StatusBiometry.NOT_OK : StatusBiometry.OK;
+    private StatusBiometry hasBiometry(Set<BiometryModel> biometryModelList) {
+        return biometryModelList.isEmpty() ? StatusBiometry.NOT_OK : StatusBiometry.OK;
     }
 
     public String hasCreditCard(String numberCreditCard){

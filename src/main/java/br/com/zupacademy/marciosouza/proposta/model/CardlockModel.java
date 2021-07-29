@@ -11,7 +11,8 @@ import java.util.List;
 import java.util.Objects;
 
 @Entity
-public class Cardlock {
+@Table(name = "cardlock")
+public class CardlockModel {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,15 +27,15 @@ public class Cardlock {
     private String userAgent;
 
     @ManyToOne
-    private Proposal proposal;
+    private ProposalModel proposalModel;
 
-    public Cardlock(String ipClient, String userAgent, Proposal proposal) {
+    public CardlockModel(String ipClient, String userAgent, ProposalModel proposalModel) {
         this.ipClient = ipClient;
         this.userAgent = userAgent;
-        this.proposal = proposal;
+        this.proposalModel = proposalModel;
     }
 
-    public Cardlock() {}
+    public CardlockModel() {}
 
 
     public void cardLockedVerication(String idcard, AccountApi accountApi) {
@@ -56,7 +57,7 @@ public class Cardlock {
         return userAgent;
     }
 
-    public Proposal getProposal() {
-        return proposal;
+    public ProposalModel getProposal() {
+        return proposalModel;
     }
 }

@@ -5,7 +5,7 @@ import br.com.zupacademy.marciosouza.proposta.clientapi.analise.dto.ProposalForF
 import br.com.zupacademy.marciosouza.proposta.clientapi.analise.feignclient.FinancialAnalysisApi;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponse;
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -32,23 +32,23 @@ public class ProposalController {
     @Transactional
     public ResponseEntity<?> registerProposal(@RequestBody @Valid ProposalRequest proposalRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        Proposal proposal = proposalRequest.toModel();
+        ProposalModel proposalModel = proposalRequest.toModel();
 
-        URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(proposal.getId()).toUri();
+        URI uri = uriComponentsBuilder.path("/topicos/{id}").buildAndExpand(proposalModel.getId()).toUri();
 
-        proposalRepository.save(proposal);
+        proposalRepository.save(proposalModel);
 
-        ProposalForFinancialAnalysisResponse response = financialAnalysisApi.verificationFinancialAnalysis(new ProposalForFinancialAnalysisRequest(proposal));
+        ProposalForFinancialAnalysisResponse response = financialAnalysisApi.verificationFinancialAnalysis(new ProposalForFinancialAnalysisRequest(proposalModel));
 
-        proposal.setStatus(response.getResultadoSolicitacao());
+        proposalModel.setStatus(response.getResultadoSolicitacao());
 
-        return ResponseEntity.created(uri).body(new ProposalResponse(proposal));
+        return ResponseEntity.created(uri).body(new ProposalResponse(proposalModel));
     }
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> proposedConsultation(@PathVariable Long id){
 
-        Optional<Proposal> proposal = proposalRepository.findById(id);
+        Optional<ProposalModel> proposal = proposalRepository.findById(id);
 
         if (proposal.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Proposta não encontrada");

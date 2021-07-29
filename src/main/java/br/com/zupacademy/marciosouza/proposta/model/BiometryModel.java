@@ -5,7 +5,8 @@ import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Entity
-public class Biometry {
+@Table(name = "biometry")
+public class BiometryModel {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,31 +16,31 @@ public class Biometry {
     private String biometria;
 
     @ManyToOne
-    private Proposal proposal;
+    private ProposalModel proposalModel;
 
-    public Biometry(String biometria, Proposal proposal) {
+    public BiometryModel(String biometria, ProposalModel proposalModel) {
         this.biometria = biometria;
-        this.proposal = proposal;
+        this.proposalModel = proposalModel;
     }
 
     @Deprecated
-    public Biometry() {
+    public BiometryModel() {
     }
 
     public String getBiometria() {
         return biometria;
     }
 
-    public Proposal getProposal() {
-        return proposal;
+    public ProposalModel getProposal() {
+        return proposalModel;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Biometry biometry = (Biometry) o;
-        return Objects.equals(id, biometry.id);
+        BiometryModel biometryModel = (BiometryModel) o;
+        return Objects.equals(id, biometryModel.id);
     }
 
     @Override

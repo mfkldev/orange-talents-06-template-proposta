@@ -1,6 +1,6 @@
 package br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto;
 
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import com.fasterxml.jackson.annotation.JsonCreator;
 
 public class ElegibleProposalRequest {
@@ -8,8 +8,8 @@ public class ElegibleProposalRequest {
     private Long id;
 
     @JsonCreator(mode = JsonCreator.Mode.PROPERTIES)
-    public ElegibleProposalRequest(Proposal oneEligibleProposal) {
-        this.id = oneEligibleProposal.getId();
+    public ElegibleProposalRequest(ProposalModel oneEligibleProposalModel) {
+        this.id = oneEligibleProposalModel.getId();
     }
 
     public Long getId() {

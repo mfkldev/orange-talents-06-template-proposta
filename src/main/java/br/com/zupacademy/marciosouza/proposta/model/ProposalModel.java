@@ -10,7 +10,8 @@ import java.util.List;
 import java.util.Set;
 
 @Entity
-public class Proposal {
+@Table(name = "proposal")
+public class ProposalModel {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -36,17 +37,20 @@ public class Proposal {
     @Column(name = "idcard")
     private String idCard = null;
 
-    @OneToMany(mappedBy = "proposal", cascade = CascadeType.MERGE)
-    private Set<Biometry> biometryList = new HashSet<>();
+    @OneToMany(mappedBy = "proposalModel", cascade = CascadeType.MERGE)
+    private Set<BiometryModel> biometryModelList = new HashSet<>();
 
-    @OneToMany(mappedBy = "proposal")
-    private List<Cardlock> cardlockList = new ArrayList<>();
+    @OneToMany(mappedBy = "proposalModel")
+    private List<CardlockModel> cardlockModelList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "proposalModel")
+    private List<TravelNoticeModel> travelNoticeModelList = new ArrayList<>();
 
     @Deprecated
-    public Proposal() {
+    public ProposalModel() {
     }
 
-    public Proposal(String document, String email, String name, String address, BigDecimal salary) {
+    public ProposalModel(String document, String email, String name, String address, BigDecimal salary) {
         this.document = document;
         this.email = email;
         this.name = name;
@@ -90,11 +94,11 @@ public class Proposal {
         return this.idCard;
     }
 
-    public Set<Biometry> getBiometryList() {
-        return biometryList;
+    public Set<BiometryModel> getBiometryList() {
+        return biometryModelList;
     }
 
-    public void setBiometry(Biometry biometry) {
-        biometryList.add(biometry);
+    public void setBiometry(BiometryModel biometryModel) {
+        biometryModelList.add(biometryModel);
     }
 }

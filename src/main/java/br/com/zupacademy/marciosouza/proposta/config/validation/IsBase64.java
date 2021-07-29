@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Target({FIELD, PARAMETER})
 @Retention(RUNTIME)
 @Constraint(validatedBy = IsBase64Validator.class)
-public @interface isBase64 {
+public @interface IsBase64 {
 
     String message() default "Não está em formato Base64";
 

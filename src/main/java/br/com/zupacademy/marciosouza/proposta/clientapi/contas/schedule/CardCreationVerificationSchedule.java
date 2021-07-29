@@ -3,7 +3,7 @@ package br.com.zupacademy.marciosouza.proposta.clientapi.contas.schedule;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardCreationVerificationResponse;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.ElegibleProposalRequest;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.AccountApi;
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -22,9 +22,9 @@ public class CardCreationVerificationSchedule {
 
     @Scheduled(fixedDelay = 10000)
     private void run() {
-        List<Proposal> eligibleProposals = proposalRepository.eligibleSearchWithoutCard();
+        List<ProposalModel> eligibleProposalModels = proposalRepository.eligibleSearchWithoutCard();
 
-        eligibleProposals.forEach(
+        eligibleProposalModels.forEach(
                 oneEligibleProposal -> {
                     ElegibleProposalRequest requests = new ElegibleProposalRequest(oneEligibleProposal);
 

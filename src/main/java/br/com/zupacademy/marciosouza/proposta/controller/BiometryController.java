@@ -3,8 +3,8 @@ package br.com.zupacademy.marciosouza.proposta.controller;
 import br.com.zupacademy.marciosouza.proposta.config.exception.ProposalNotFoundException;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.BiometryRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponseWithBiometry;
-import br.com.zupacademy.marciosouza.proposta.model.Biometry;
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.BiometryModel;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,15 +27,15 @@ public class BiometryController {
     @Transactional
     public ResponseEntity<?> save(@RequestParam String idcard, @RequestBody @Valid BiometryRequest biometryRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        Proposal proposal = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
+        ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
 
-        Biometry biometry = biometryRequest.toModel(proposal);
+        BiometryModel biometryModel = biometryRequest.toModel(proposalModel);
 
-        proposal.setBiometry(biometry);
-        proposalRepository.save(proposal);
+        proposalModel.setBiometry(biometryModel);
+        proposalRepository.save(proposalModel);
 
-        URI uri =  uriComponentsBuilder.path("/biometri/{id}").buildAndExpand(proposal.getId()).toUri();
+        URI uri =  uriComponentsBuilder.path("/biometri/{id}").buildAndExpand(proposalModel.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new ProposalResponseWithBiometry(proposal));
+        return ResponseEntity.created(uri).body(new ProposalResponseWithBiometry(proposalModel));
     }
 }

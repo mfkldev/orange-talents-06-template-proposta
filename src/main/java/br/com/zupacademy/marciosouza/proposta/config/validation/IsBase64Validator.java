@@ -4,10 +4,10 @@ import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.util.Base64;
 
-public class IsBase64Validator implements ConstraintValidator<isBase64, String> {
+public class IsBase64Validator implements ConstraintValidator<IsBase64, String> {
 
     @Override
-    public void initialize(isBase64 constraintAnnotation) {
+    public void initialize(IsBase64 constraintAnnotation) {
         ConstraintValidator.super.initialize(constraintAnnotation);
     }
 

@@ -2,7 +2,7 @@ package br.com.zupacademy.marciosouza.proposta.controller.dto;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
 import br.com.zupacademy.marciosouza.proposta.config.validation.Unique;
-import br.com.zupacademy.marciosouza.proposta.model.Proposal;
+import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 
 import javax.validation.constraints.*;
 import java.math.BigDecimal;
@@ -13,7 +13,7 @@ public class ProposalRequest {
     @NotBlank
     private String document;
 
-    @Email @NotBlank @Unique(clazz = Proposal.class, fieldName = "email")
+    @Email @NotBlank @Unique(clazz = ProposalModel.class, fieldName = "email")
     private String email;
 
     @NotBlank
@@ -33,7 +33,7 @@ public class ProposalRequest {
         this.salary = salary;
     }
 
-    public Proposal toModel() {
-        return new Proposal(this.document, this.email, this.name, this.address, this.salary);
+    public ProposalModel toModel() {
+        return new ProposalModel(this.document, this.email, this.name, this.address, this.salary);
     }
 }
