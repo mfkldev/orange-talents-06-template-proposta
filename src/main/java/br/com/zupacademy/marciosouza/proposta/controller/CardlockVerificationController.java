@@ -2,10 +2,12 @@ package br.com.zupacademy.marciosouza.proposta.controller;
 
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.AccountApi;
 import br.com.zupacademy.marciosouza.proposta.config.exception.ProposalNotFoundException;
+import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardlockRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.CardlockResponse;
 import br.com.zupacademy.marciosouza.proposta.controller.service.IpRequest;
 import br.com.zupacademy.marciosouza.proposta.model.CardlockModel;
 import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
+import br.com.zupacademy.marciosouza.proposta.model.enums.StatusCardLock;
 import br.com.zupacademy.marciosouza.proposta.repository.CardlockRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import feign.FeignException;
@@ -16,10 +18,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
-import java.util.Map;
 
 @RestController
 public class CardlockVerificationController {
@@ -47,6 +47,7 @@ public class CardlockVerificationController {
 
         cardLockRequisition(idcard);
 
+        cardlockModel.setStatusCardLock(StatusCardLock.BLOQUEADO);
         cardlockRepository.save(cardlockModel);
 
         return ResponseEntity.ok(new CardlockResponse(cardlockModel));
@@ -54,7 +55,7 @@ public class CardlockVerificationController {
 
     private void cardLockRequisition(String idcard) {
         try {
-            accountApi.requestCardLock(idcard, Map.of("sistemaResponsavel", "Api-proposta"));
+            accountApi.requestCardLock(idcard, new CardlockRequest("Api-proposta"));
         }catch (FeignException exception){
             throw new ResponseStatusException(HttpStatus.BAD_GATEWAY, "Não foi possível notificar o bloqueio");
         }

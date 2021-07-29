@@ -3,6 +3,7 @@ package br.com.zupacademy.marciosouza.proposta.model;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.Bloqueios;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.AccountApi;
 import br.com.zupacademy.marciosouza.proposta.config.exception.CardlockUnprocessableEntityException;
+import br.com.zupacademy.marciosouza.proposta.model.enums.StatusCardLock;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
@@ -29,6 +30,8 @@ public class CardlockModel {
     @ManyToOne
     private ProposalModel proposalModel;
 
+    private StatusCardLock statusCardLock;
+
     public CardlockModel(String ipClient, String userAgent, ProposalModel proposalModel) {
         this.ipClient = ipClient;
         this.userAgent = userAgent;
@@ -36,7 +39,6 @@ public class CardlockModel {
     }
 
     public CardlockModel() {}
-
 
     public void cardLockedVerication(String idcard, AccountApi accountApi) {
         List<Bloqueios> bloqueios = Objects.requireNonNull(accountApi.cardLockVerification(idcard).getBody()).getBloqueios();
@@ -59,5 +61,13 @@ public class CardlockModel {
 
     public ProposalModel getProposal() {
         return proposalModel;
+    }
+
+    public StatusCardLock getStatusCardLock() {
+        return statusCardLock;
+    }
+
+    public void setStatusCardLock(StatusCardLock statusCardLock) {
+        this.statusCardLock = statusCardLock;
     }
 }

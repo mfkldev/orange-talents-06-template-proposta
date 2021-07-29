@@ -1,6 +1,7 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
+import br.com.zupacademy.marciosouza.proposta.model.enums.StatusProposal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
 import java.math.BigDecimal;

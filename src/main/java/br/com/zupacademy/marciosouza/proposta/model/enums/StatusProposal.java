@@ -1,4 +1,4 @@
-package br.com.zupacademy.marciosouza.proposta.model;
+package br.com.zupacademy.marciosouza.proposta.model.enums;
 
 public enum StatusProposal {
     NAO_ELEGIVEL,

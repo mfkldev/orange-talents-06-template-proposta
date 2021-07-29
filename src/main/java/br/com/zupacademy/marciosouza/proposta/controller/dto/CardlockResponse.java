@@ -11,12 +11,14 @@ public class CardlockResponse {
     private String ipClient;
     private String userAgent;
     private String idCard;
+    private String statusCardlock;
 
     public CardlockResponse(CardlockModel cardlockModel) {
         this.creationMoment = cardlockModel.getCreationMoment();
         this.ipClient = cardlockModel.getIpClient();
         this.userAgent = cardlockModel.getUserAgent();
         this.idCard = cardlockModel.getProposal().getIdCard();
+        this.statusCardlock = cardlockModel.getStatusCardLock().toString();
     }
 
     public LocalDateTime getCreationMoment() {
@@ -33,5 +35,9 @@ public class CardlockResponse {
 
     public String getIdCard() {
         return idCard;
+    }
+
+    public String getStatusCardlock() {
+        return statusCardlock;
     }
 }
