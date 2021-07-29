@@ -45,8 +45,6 @@ public class AssociatePaypalController {
         ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
         if(!proposalModel.getEmail().equals(proposalRequest.getEmail())) throw new UnprocessableEntityException("Esse cartão não pertence ao email enviado");
 
-        AccountCardResponse accountCardResponse = accountApi.getAccountCard(idcard).getBody();
-
         Wallet wallet = new Wallet(proposalModel, walletType);
         wallet.checkRecordWallet(idcard, accountApi, walletType);
 
