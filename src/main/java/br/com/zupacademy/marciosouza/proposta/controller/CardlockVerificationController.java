@@ -11,6 +11,8 @@ import br.com.zupacademy.marciosouza.proposta.model.enums.StatusCardLock;
 import br.com.zupacademy.marciosouza.proposta.repository.CardlockRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,7 +38,6 @@ public class CardlockVerificationController {
     @PostMapping("/bloqueio")
     @Transactional
     public ResponseEntity<?> save(@RequestParam String idcard, HttpServletRequest httpServletRequest) {
-
         ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
 
         String ipClient = IpRequest.getIpRequest(httpServletRequest);

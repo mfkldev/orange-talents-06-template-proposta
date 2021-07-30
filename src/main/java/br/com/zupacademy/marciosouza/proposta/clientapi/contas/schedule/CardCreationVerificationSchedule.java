@@ -21,7 +21,7 @@ public class CardCreationVerificationSchedule {
     private ProposalRepository proposalRepository;
 
     @Scheduled(fixedDelay = 10000)
-    private void run() {
+    protected void run() {
         List<ProposalModel> eligibleProposalModels = proposalRepository.eligibleSearchWithoutCard();
 
         eligibleProposalModels.forEach(

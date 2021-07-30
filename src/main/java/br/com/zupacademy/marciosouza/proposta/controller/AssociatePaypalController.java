@@ -12,6 +12,8 @@ import br.com.zupacademy.marciosouza.proposta.model.Wallet;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.WalletRepository;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +37,10 @@ public class AssociatePaypalController {
     @Autowired
     private WalletRepository walletRepository;
 
+    @Autowired
+    private Tracer tracer;
+
+
     @PostMapping("/carteira/paypal")
     @Transactional
     public ResponseEntity<?> associatePaypal(@RequestParam String idcard, @RequestBody @Valid ProposalRequestForWalltet proposalRequest, UriComponentsBuilder uriComponentsBuilder){
@@ -50,6 +56,11 @@ public class AssociatePaypalController {
     }
 
     private ResponseEntity<?> performWalletAssociation(@RequestParam String idcard, @RequestBody @Valid ProposalRequestForWalltet proposalRequest, UriComponentsBuilder uriComponentsBuilder, String walletType) {
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("user.email", proposalRequest.getEmail());
+        activeSpan.setBaggageItem("user.email", proposalRequest.getEmail());
+        activeSpan.log("Log de Marcio Franklin");
+
         Wallet wallet = createWallet(idcard, proposalRequest, walletType);
 
         walletRepository.save(wallet);

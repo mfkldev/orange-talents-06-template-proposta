@@ -10,6 +10,8 @@ import br.com.zupacademy.marciosouza.proposta.model.TravelNoticeModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.TravelNoticeRepository;
 import feign.FeignException;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,9 +36,14 @@ public class TravelNoticeController {
     @Autowired
     public AccountApi accountApi;
 
+    @Autowired
+    private Tracer tracer;
+
     @PostMapping("/aviso-viagem")
     @Transactional
     public ResponseEntity<?> save(@RequestParam String idcard, @RequestBody @Valid TravelNoticeRequest request, HttpServletRequest httpServletRequest){
+        Span activeSpan = tracer.activeSpan();
+
         ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
 
         String ipClient = IpRequest.getIpRequest(httpServletRequest);
@@ -47,6 +54,10 @@ public class TravelNoticeController {
         travelNoticeRequisition(idcard, request);
 
         travelNoticeRepository.save(travelNoticeModel);
+
+        activeSpan.setTag("user.email", proposalModel.getEmail());
+        activeSpan.setBaggageItem("user.email", proposalModel.getEmail());
+        activeSpan.log("Log de Marcio Franklin");
 
         return ResponseEntity.ok(new TravelNoticeResponse(travelNoticeModel));
     }

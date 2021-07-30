@@ -7,6 +7,10 @@ import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponse;
 import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
+import io.opentracing.Span;
+import io.opentracing.Tracer;
+import io.opentracing.tag.Tags;
+import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +32,16 @@ public class ProposalController {
     @Autowired
     private FinancialAnalysisApi financialAnalysisApi;
 
+    @Autowired
+    private Tracer tracer;
+
     @PostMapping
     @Transactional
     public ResponseEntity<?> registerProposal(@RequestBody @Valid ProposalRequest proposalRequest, UriComponentsBuilder uriComponentsBuilder){
+        Span activeSpan = tracer.activeSpan();
+        activeSpan.setTag("user.email", proposalRequest.getEmail());
+        activeSpan.setBaggageItem("user.email", proposalRequest.getEmail());
+        activeSpan.log("Log de Marcio Franklin");
 
         ProposalModel proposalModel = proposalRequest.toModel();
 
@@ -47,12 +58,15 @@ public class ProposalController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> proposedConsultation(@PathVariable Long id){
+        Span activeSpan = tracer.activeSpan();
 
         Optional<ProposalModel> proposal = proposalRepository.findById(id);
 
         if (proposal.isEmpty()){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Proposta não encontrada");
         }
+
+        activeSpan.setTag("user.email", proposal.get().getEmail());
 
         return ResponseEntity.ok(new ProposalResponse(proposal.get()));
     }
