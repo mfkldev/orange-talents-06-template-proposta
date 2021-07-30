@@ -1,6 +1,5 @@
 package br.com.zupacademy.marciosouza.proposta.controller;
 
-import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.AccountCardResponse;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.AssociateWalletRequest;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.WalletContaAPIReponse;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.AccountApi;
@@ -12,8 +11,8 @@ import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.model.Wallet;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.WalletRepository;
+import feign.FeignException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -40,23 +39,50 @@ public class AssociatePaypalController {
     @Transactional
     public ResponseEntity<?> associatePaypal(@RequestParam String idcard, @RequestBody @Valid ProposalRequestForWalltet proposalRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        String walletType = "PayPal";
+        return performWalletAssociation(idcard, proposalRequest, uriComponentsBuilder, "PayPal");
+    }
 
-        ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
-        if(!proposalModel.getEmail().equals(proposalRequest.getEmail())) throw new UnprocessableEntityException("Esse cartão não pertence ao email enviado");
+    @PostMapping("/carteira/samsung-pay")
+    @Transactional
+    public ResponseEntity<?> associateSamsungPay(@RequestParam String idcard, @RequestBody @Valid ProposalRequestForWalltet proposalRequest, UriComponentsBuilder uriComponentsBuilder){
 
-        Wallet wallet = new Wallet(proposalModel, walletType);
-        wallet.checkRecordWallet(idcard, accountApi, walletType);
+        return performWalletAssociation(idcard, proposalRequest, uriComponentsBuilder, "SamsungPay");
+    }
 
-        ResponseEntity<WalletContaAPIReponse> walletResponse = accountApi.associatePaypal(idcard, new AssociateWalletRequest(proposalRequest.getEmail(), walletType));
+    private ResponseEntity<?> performWalletAssociation(@RequestParam String idcard, @RequestBody @Valid ProposalRequestForWalltet proposalRequest, UriComponentsBuilder uriComponentsBuilder, String walletType) {
+        Wallet wallet = createWallet(idcard, proposalRequest, walletType);
 
-        if(walletResponse.getStatusCode() != HttpStatus.OK) throw new UnprocessableEntityException("Não foi possível associar a carteira");
-
-        wallet.setIdWalletContasAPI(walletResponse.getBody().getId());
         walletRepository.save(wallet);
 
         URI uri = uriComponentsBuilder.path("/carteira/{id}").buildAndExpand(wallet.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new WalletResponse(wallet));
+    }
+
+    private Wallet createWallet(String idcard, ProposalRequestForWalltet proposalRequest, String walletType) {
+        ProposalModel proposalModel = checkInconsistency(idcard, proposalRequest);
+
+        String idWalletAPI = associateWallet(idcard, proposalRequest, walletType).getBody().getId();
+
+        return new Wallet(proposalModel, walletType, idWalletAPI);
+    }
+
+    private ProposalModel checkInconsistency(String idcard, ProposalRequestForWalltet proposalRequest) {
+        ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
+        if(!proposalModel.getEmail().equals(proposalRequest.getEmail())) throw new UnprocessableEntityException("Esse cartão não pertence ao email enviado");
+        return proposalModel;
+    }
+
+    private ResponseEntity<WalletContaAPIReponse> associateWallet(String idcard, ProposalRequestForWalltet proposalRequest, String walletType) {
+        ResponseEntity<WalletContaAPIReponse> walletResponse;
+        
+        try{
+             walletResponse = accountApi.associatePaypal(idcard, new AssociateWalletRequest(proposalRequest.getEmail(), walletType));
+        }catch (FeignException exception){
+            if(exception.status() == 422) throw new UnprocessableEntityException("A carteira já se encontra associada a esse cartão");
+            throw new UnprocessableEntityException("Não foi possível associar a carteira");
+        }
+
+        return walletResponse;
     }
 }

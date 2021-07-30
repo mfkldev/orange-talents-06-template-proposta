@@ -21,19 +21,13 @@ public class Wallet {
 
     private String idWalletContasAPI;
 
-    public Wallet(ProposalModel proposalModel, String walletType) {
+    public Wallet(ProposalModel proposalModel, String walletType, String idWalletContasAPI) {
         this.proposalModel = proposalModel;
         this.walletType = walletType;
+        this.idWalletContasAPI = idWalletContasAPI;
     }
 
     public Wallet() {
-    }
-
-    public void checkRecordWallet(String idcard, AccountApi accountApi, String walletType) {
-        List<Carteira> carteiras = Objects.requireNonNull(accountApi.getAccountCard(idcard).getBody()).getCarteiras();
-
-        boolean hasWallet = carteiras.stream().anyMatch(o -> o.hasWallet(walletType));
-        if (hasWallet) throw new UnprocessableEntityException("A carteira já se encontra associada a esse cartão");
     }
 
     public ProposalModel getProposalModel() {
@@ -42,10 +36,6 @@ public class Wallet {
 
     public String getIdWalletContasAPI() {
         return idWalletContasAPI;
-    }
-
-    public void setIdWalletContasAPI(String idWalletContasAPI) {
-        this.idWalletContasAPI = idWalletContasAPI;
     }
 
     public Long getId() {
