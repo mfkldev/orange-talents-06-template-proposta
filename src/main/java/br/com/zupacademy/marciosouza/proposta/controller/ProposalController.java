@@ -3,14 +3,14 @@ package br.com.zupacademy.marciosouza.proposta.controller;
 import br.com.zupacademy.marciosouza.proposta.clientapi.analise.dto.ProposalForFinancialAnalysisRequest;
 import br.com.zupacademy.marciosouza.proposta.clientapi.analise.dto.ProposalForFinancialAnalysisResponse;
 import br.com.zupacademy.marciosouza.proposta.clientapi.analise.feignclient.FinancialAnalysisApi;
+import br.com.zupacademy.marciosouza.proposta.config.exception.UnprocessableEntityException;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.ProposalResponse;
+import br.com.zupacademy.marciosouza.proposta.controller.usecase.CryptDocumentUsecase;
 import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import io.opentracing.Span;
 import io.opentracing.Tracer;
-import io.opentracing.tag.Tags;
-import io.opentracing.util.GlobalTracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +42,10 @@ public class ProposalController {
         activeSpan.setTag("user.email", proposalRequest.getEmail());
         activeSpan.setBaggageItem("user.email", proposalRequest.getEmail());
         activeSpan.log("Log de Marcio Franklin");
+
+        String documentEncrypted = CryptDocumentUsecase.encryptDocument(proposalRequest.getDocument());
+
+        if(proposalRepository.findByDocument(documentEncrypted).isPresent()) throw new UnprocessableEntityException("Já existe uma proposta associada a esse documetno");
 
         ProposalModel proposalModel = proposalRequest.toModel();
 

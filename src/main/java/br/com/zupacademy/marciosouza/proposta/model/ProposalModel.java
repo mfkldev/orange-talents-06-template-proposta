@@ -1,6 +1,7 @@
 package br.com.zupacademy.marciosouza.proposta.model;
 
 import br.com.zupacademy.marciosouza.proposta.config.validation.CpfCnpj;
+import br.com.zupacademy.marciosouza.proposta.controller.usecase.CryptDocumentUsecase;
 import br.com.zupacademy.marciosouza.proposta.model.enums.StatusProposal;
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -14,7 +15,7 @@ public class ProposalModel {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @CpfCnpj @NotBlank
+    @NotBlank
     private String document;
 
     @Email @NotBlank
@@ -52,7 +53,7 @@ public class ProposalModel {
     }
 
     public ProposalModel(String document, String email, String name, String address, BigDecimal salary) {
-        this.document = document;
+        this.document = CryptDocumentUsecase.encryptDocument(document);
         this.email = email;
         this.name = name;
         this.address = address;
@@ -76,7 +77,7 @@ public class ProposalModel {
     }
 
     public String getDocument() {
-        return document;
+        return CryptDocumentUsecase.dencryptDocument(document);
     }
 
     public void setStatus(String status) {

@@ -8,11 +8,10 @@ import java.math.BigDecimal;
 
 public class ProposalRequest {
 
-    @CpfCnpj
-    @NotBlank
+    @CpfCnpj @NotBlank
     private String document;
 
-    @Email @NotBlank @Unique(clazz = ProposalModel.class, fieldName = "email")
+    @Email @NotBlank @Unique(fieldName = "email", clazz = ProposalModel.class)
     private String email;
 
     @NotBlank
@@ -38,5 +37,9 @@ public class ProposalRequest {
 
     public String getEmail() {
         return email;
+    }
+
+    public String getDocument() {
+        return document;
     }
 }

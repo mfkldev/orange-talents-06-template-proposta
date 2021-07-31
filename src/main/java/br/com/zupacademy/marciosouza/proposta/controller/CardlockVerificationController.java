@@ -4,15 +4,13 @@ import br.com.zupacademy.marciosouza.proposta.clientapi.contas.feignclient.Accou
 import br.com.zupacademy.marciosouza.proposta.config.exception.ProposalNotFoundException;
 import br.com.zupacademy.marciosouza.proposta.clientapi.contas.dto.CardlockRequest;
 import br.com.zupacademy.marciosouza.proposta.controller.dto.CardlockResponse;
-import br.com.zupacademy.marciosouza.proposta.controller.service.IpRequest;
+import br.com.zupacademy.marciosouza.proposta.controller.usecase.IpRequestUsecase;
 import br.com.zupacademy.marciosouza.proposta.model.CardlockModel;
 import br.com.zupacademy.marciosouza.proposta.model.ProposalModel;
 import br.com.zupacademy.marciosouza.proposta.model.enums.StatusCardLock;
 import br.com.zupacademy.marciosouza.proposta.repository.CardlockRepository;
 import br.com.zupacademy.marciosouza.proposta.repository.ProposalRepository;
 import feign.FeignException;
-import io.opentracing.Span;
-import io.opentracing.Tracer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,7 +38,7 @@ public class CardlockVerificationController {
     public ResponseEntity<?> save(@RequestParam String idcard, HttpServletRequest httpServletRequest) {
         ProposalModel proposalModel = proposalRepository.findByIdCard(idcard).orElseThrow(() -> new ProposalNotFoundException("Nenhuma proposta associada a esse cartão foi encontrada"));
 
-        String ipClient = IpRequest.getIpRequest(httpServletRequest);
+        String ipClient = IpRequestUsecase.getIpRequest(httpServletRequest);
         String userAgent = httpServletRequest.getHeader("User-Agent");
 
         CardlockModel cardlockModel = new CardlockModel(ipClient, userAgent, proposalModel);

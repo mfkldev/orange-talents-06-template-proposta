@@ -18,7 +18,7 @@ import java.lang.annotation.RetentionPolicy;
 @ReportAsSingleViolation
 @Constraint(validatedBy = {})
 public @interface CpfCnpj {
-    String message() default "{beanvalidation.documento}";
+    String message() default "Não é um documento válido";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

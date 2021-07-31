@@ -14,4 +14,6 @@ public interface ProposalRepository extends JpaRepository<ProposalModel, Long> {
     List<ProposalModel> eligibleSearchWithoutCard();
 
     Optional<ProposalModel> findByIdCard(String idCard);
+
+    Optional<ProposalModel> findByDocument(String idCard);
 }
