@@ -26,7 +26,7 @@ import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
-public class AssociatePaypalController {
+public class AssociateWalletlController {
 
     @Autowired
     private ProposalRepository proposalRepository;
